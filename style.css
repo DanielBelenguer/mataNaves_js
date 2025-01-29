@@ -1,0 +1,40 @@
+body {
+    background-image: url("assets/images/fondo.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+button {
+    border: 0px;
+    color: white;
+    background-color: inherit;
+    font-weight: bolder;
+    font-size: 1.5em;
+    font-family: Times, serif;
+}
+
+h3 {
+    display: inline;
+    color: white;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+}
+
+#puntuacion {
+    float: left;
+}
+
+#tiempo {
+    float: right;
+}
