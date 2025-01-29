@@ -1,4 +1,4 @@
-const duracionPartida = 10; // duración de la partida (en segundos)
+const duracionPartida = 30; // duración de la partida (en segundos)
 const numeroNaves = 5; // número de zombis que pueden aparecen en pantalla.
 let partidaIniciada = false; //indicador de partida iniciada (en ese caso su valor sería true).
 let temporizador; // el identificador del temporizador que contabiliza el tiempo (y el movimiento del juego
@@ -38,7 +38,7 @@ function iniciarPartida() {
     marcadorTiempo.innerHTML = "TIEMPO: " + tiempo;
     marcadorPuntuacion.style.display = "block";
     marcadorTiempo.style.display = "block";
-    temporizador = window.setInterval(actualizarPantalla, 500);
+    temporizador = window.setInterval(actualizarPantalla, 800);
     fondoMusical.play();
 }
 
@@ -48,7 +48,7 @@ function crearNave() {
         html.appendChild(nave);
         nave.src = "./assets/images/nave.png";
         nave.style.position = "absolute";
-        nave.style.zIndex = "-1";
+        nave.style.zIndex = "1";
         nave.style.display = "none";
         nave.addEventListener("touchstart", explotarNave);
         listaNaves[x] = nave;
@@ -59,7 +59,7 @@ function crearNave() {
 function crearExplosion() {
     explosion = document.createElement("img");
     html.appendChild(explosion);
-    explosion.src = "../Imagenes/explosion.png";
+    explosion.src = "./assets/images/explosion.png";
     explosion.style.position = "absolute";
     explosion.style.zIndex = "-1";
     explosion.style.display = "none";
@@ -101,10 +101,10 @@ function actualizarNave() {
 
 function explotarNave(evento) {
     if (partidaIniciada) {
-        explosion.currentTime = 0;
-        explosion.play();
+        audioExplosion.currentTime = 0; // Asegúrate de que el audio de la explosión se reinicie
+        audioExplosion.play(); // Reproduce el audio de la explosión
         const nave = evento.target;
-        const puntoContacto = evento.changedTouches[0];
+        const puntoContacto = evento.changedTouches[0]; // Asegúrate de obtener el punto de contacto correctamente
         puntuacion += 1;
         marcadorPuntuacion.innerHTML = "PUNTUACIÓN: " + puntuacion;
         nave.style.display = "none";
@@ -112,4 +112,4 @@ function explotarNave(evento) {
         explosion.style.left = puntoContacto.clientX - explosion.clientWidth / 2 + "px";
         explosion.style.top = puntoContacto.clientY - explosion.clientHeight / 2 + "px";
     }
-}                    
+}
