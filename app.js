@@ -24,6 +24,13 @@ window.addEventListener("focus", function () {
     partidaIniciada = true;
     fondoMusical.play();
 });
+window.addEventListener("resize", ajustarPantalla);
+
+function ajustarPantalla() {
+    const escala = Math.min(window.innerWidth / 800, window.innerHeight / 600);
+    html.style.transform = `scale(${escala})`;
+    html.style.transformOrigin = 'top left';
+}
 
 function iniciarPartida() {
     if (html.requestFullscreen) { html.requestFullscreen(); }
@@ -40,6 +47,7 @@ function iniciarPartida() {
     marcadorTiempo.style.display = "block";
     temporizador = window.setInterval(actualizarPantalla, 800);
     fondoMusical.play();
+    ajustarPantalla();
 }
 
 function crearNave() {
@@ -87,16 +95,35 @@ function actualizarTiempo() {
 
 function actualizarNave() {
     let naveX, naveY;
+    const posicionesOcupadas = [];
     for (let x = 0; x < numeroNaves; x++) {
         const nave = listaNaves[x];
         if (Math.random() > 0.5) {
-            naveX = Math.random() * (window.innerWidth - nave.clientWidth);
-            naveY = Math.random() * (window.innerHeight - nave.clientHeight);
+            do {
+                naveX = Math.random() * (window.innerWidth - nave.clientWidth);
+                naveY = Math.random() * (window.innerHeight - nave.clientHeight);
+            } while (posicionOcupada(naveX, naveY, nave.clientWidth, nave.clientHeight, posicionesOcupadas));
+            
             nave.style.left = naveX + "px";
             nave.style.top = naveY + "px";
             nave.style.display = "block";
+            posicionesOcupadas.push({ x: naveX, y: naveY, width: nave.clientWidth, height: nave.clientHeight });
+        } else {
+            nave.style.display = "none";
         }
     }
+}
+
+function posicionOcupada(x, y, width, height, posiciones) {
+    for (const pos of posiciones) {
+        if (x < pos.x + pos.width &&
+            x + width > pos.x &&
+            y < pos.y + pos.height &&
+            y + height > pos.y) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function explotarNave(evento) {
